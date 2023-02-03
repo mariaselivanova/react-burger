@@ -2,6 +2,8 @@ import React from 'react';
 import { Tab, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredientsStyle from './BurgerIngredients.module.css';
 import FoodCard from '../FoodCard/FoodCard';
+import PropTypes from 'prop-types';
+import { foodElementPropTypes } from '../../utils/data';
 
 function BurgerIngredients({ burgerData }) {
   const [current, setCurrent] = React.useState('Булки')
@@ -30,10 +32,10 @@ function BurgerIngredients({ burgerData }) {
         <div className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
           {burgerData.map((data) => (
             data.type === "bun" && <FoodCard
-                                      key={data._id}
-                                      img={data.image}
-                                      price={data.price}
-                                      name={data.name} />
+              key={data._id}
+              img={data.image}
+              price={data.price}
+              name={data.name} />
           ))
           }
         </div>
@@ -41,10 +43,10 @@ function BurgerIngredients({ burgerData }) {
         <div className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
           {burgerData.map((data) => (
             data.type === "sauce" && <FoodCard
-                                        key={data._id}
-                                        img={data.image}
-                                        price={data.price}
-                                        name={data.name} />
+              key={data._id}
+              img={data.image}
+              price={data.price}
+              name={data.name} />
           ))
           }
         </div>
@@ -52,16 +54,20 @@ function BurgerIngredients({ burgerData }) {
         <div className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
           {burgerData.map((data) => (
             data.type === "main" && <FoodCard
-                                      key={data._id}
-                                      img={data.image}
-                                      price={data.price}
-                                      name={data.name} />
-            ))
+              key={data._id}
+              img={data.image}
+              price={data.price}
+              name={data.name} />
+          ))
           }
         </div>
       </div>
     </section>
   )
 }
+
+BurgerIngredients.propTypes = {
+  burgerData: PropTypes.arrayOf(foodElementPropTypes)
+};
 
 export default BurgerIngredients

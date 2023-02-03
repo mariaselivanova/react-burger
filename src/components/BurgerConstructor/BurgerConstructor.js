@@ -1,7 +1,9 @@
 import BurgerConstructorStyle from "./BurgerConstructor.module.css";
 import { Box, Typography, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import FoodElement from "../FoodElement/FoodElement";
-import MoneyIcon from '../images/iconMoney.svg';
+import MoneyIcon from '../../images/iconMoney.svg';
+import PropTypes from 'prop-types';
+import { foodElementPropTypes } from '../../utils/data';
 
 function BurgerConstructor({ burgerData }) {
 
@@ -18,7 +20,10 @@ function BurgerConstructor({ burgerData }) {
     <section className={`${BurgerConstructorStyle.section} pt-25`}>
       <div className={BurgerConstructorStyle.list}>
         {burgerData.map((element) => (
-          <FoodElement element={element} key={element._id} />
+          <FoodElement
+            element={element}
+            key={element._id}
+          />
         ))}
       </div>
       <div className={`${BurgerConstructorStyle.orderinfo} mt-10 pr-6 mb-10`}>
@@ -33,5 +38,9 @@ function BurgerConstructor({ burgerData }) {
     </section>
   )
 }
+
+BurgerConstructor.propTypes = {
+  burgerData: PropTypes.arrayOf(foodElementPropTypes)
+};
 
 export default BurgerConstructor

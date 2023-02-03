@@ -6,7 +6,7 @@ function AppHeader() {
   return (
     <header className={AppHeaderStyle.header}>
       <nav className={`${AppHeaderStyle.nav} pt-4 pb-4`}>
-        <ul  className={AppHeaderStyle.navlist}>
+        <ul className={AppHeaderStyle.navlist}>
           <li>
             <ul className={AppHeaderStyle.navsection}>
               <li className={`${AppHeaderStyle.listitem} pt-4 pb-4 pr-5 pl-5`}>
