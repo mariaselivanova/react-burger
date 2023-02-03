@@ -1,0 +1,8 @@
+.main {
+  display: flex;
+  flex-direction: row;
+  width: 82%;
+  justify-content: center;
+  margin: 0 auto;
+  gap: 40px;
+}

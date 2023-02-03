@@ -1,0 +1,25 @@
+.card {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ width: 272px;
+ position: relative;
+}
+
+.price {
+  display: flex;
+  flex-direction: row;
+}
+
+.pricevalue {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.name {
+  text-align: center;
+}
+
+.counter {
+  position: absolute;
+}

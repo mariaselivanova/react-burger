@@ -1,0 +1,40 @@
+.section {
+  width: 610px;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav {
+  display: flex;
+  flex-direction: row;
+}
+
+.ingredients {
+  overflow-y: scroll;
+  max-height: 55vh;
+}
+
+.ingredients::-webkit-scrollbar-track {
+  background-color: #2F2F37;
+  margin-bottom: 30px;
+}
+
+.ingredients::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ingredients::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
+
+.foodcards {
+  display: grid;
+  grid-template-columns: repeat(2, 272px);
+  grid-column-gap: 24px;
+  grid-row-gap: 40px;
+  margin-right: 8px;
+}
+
+.link {
+  text-decoration: none;
+}

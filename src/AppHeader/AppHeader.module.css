@@ -1,0 +1,40 @@
+.header {
+  background: #1C1C21;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.navlist {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  width: 85%;
+}
+
+.navsection {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  padding: 0;
+}
+
+.icon {
+  padding-right: 8px;
+}
+
+.listitem {
+  display: flex;
+  flex-direction: row;
+}
+
+.logo {
+  padding-right: 170px;
+}
