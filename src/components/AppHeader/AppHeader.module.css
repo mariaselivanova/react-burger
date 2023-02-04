@@ -5,8 +5,10 @@
 .nav {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 85%;
   align-items: center;
+  max-width: 1480px;
+  margin: 0 auto;
 }
 
 .navlist {
@@ -16,7 +18,7 @@
   padding: 0;
   margin: 0;
   list-style-type: none;
-  width: 85%;
+  width: 100%;
 }
 
 .navsection {
@@ -33,6 +35,8 @@
 .listitem {
   display: flex;
   flex-direction: row;
+  text-decoration: none;
+  color: #F2F2F3
 }
 
 .logo {

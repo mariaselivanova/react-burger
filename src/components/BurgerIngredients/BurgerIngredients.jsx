@@ -1,4 +1,5 @@
 import React from 'react';
+// eslint-disable-next-line no-unused-vars
 import { Tab, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredientsStyle from './BurgerIngredients.module.css';
 import FoodCard from '../FoodCard/FoodCard';
@@ -6,7 +7,11 @@ import PropTypes from 'prop-types';
 import { foodElementPropTypes } from '../../utils/data';
 
 function BurgerIngredients({ burgerData }) {
-  const [current, setCurrent] = React.useState('Булки')
+  const [current, setCurrent] = React.useState('Булки');
+  const buns = burgerData.filter((item) => item.type === 'bun');
+  const mains = burgerData.filter((item) => item.type === 'main');
+  const sauces = burgerData.filter((item) => item.type === 'sauce');
+
   return (
     <section className={`${BurgerIngredientsStyle.section} mt-10`}>
       <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
@@ -30,8 +35,8 @@ function BurgerIngredients({ burgerData }) {
       <div className={`${BurgerIngredientsStyle.ingredients} mt-10`}>
         <h3 id="buns" className="text text_type_main-medium mb-6">Булки</h3>
         <div className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
-          {burgerData.map((data) => (
-            data.type === "bun" && <FoodCard
+          {buns.map((data) => (
+            <FoodCard
               key={data._id}
               img={data.image}
               price={data.price}
@@ -41,8 +46,8 @@ function BurgerIngredients({ burgerData }) {
         </div>
         <h3 id="sauce" className="text text_type_main-medium mb-6 mt-10">Соусы</h3>
         <div className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
-          {burgerData.map((data) => (
-            data.type === "sauce" && <FoodCard
+          {sauces.map((data) => (
+            <FoodCard
               key={data._id}
               img={data.image}
               price={data.price}
@@ -52,8 +57,8 @@ function BurgerIngredients({ burgerData }) {
         </div>
         <h3 id="main" className="text text_type_main-medium mb-6 mt-10">Начинки</h3>
         <div className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
-          {burgerData.map((data) => (
-            data.type === "main" && <FoodCard
+          {mains.map((data) => (
+            <FoodCard
               key={data._id}
               img={data.image}
               price={data.price}
@@ -67,7 +72,7 @@ function BurgerIngredients({ burgerData }) {
 }
 
 BurgerIngredients.propTypes = {
-  burgerData: PropTypes.arrayOf(foodElementPropTypes)
+  burgerData: PropTypes.arrayOf(foodElementPropTypes).isRequired
 };
 
 export default BurgerIngredients

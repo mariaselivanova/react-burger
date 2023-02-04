@@ -1,5 +1,5 @@
 .section {
-  width: 610px;
+  width: 48%;
   display: flex;
   flex-direction: column;
 }

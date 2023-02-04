@@ -1,7 +1,8 @@
 .section {
-  width: 600px;
+  width: 47%;
   display: flex;
   flex-direction: column;
+  margin-left: 27px;
 }
 
 .list {
@@ -9,13 +10,12 @@
   flex-direction: column;
   gap: 15px;
   overflow-y: scroll;
-  max-height: 55vh;
+  max-height: 31vh;
+  padding-right: 17px;
 }
 
 .list::-webkit-scrollbar-track {
   background-color: #2F2F37;
-  margin-top: 90px;
-  margin-bottom: 80px;
 }
 
 .list::-webkit-scrollbar {
@@ -29,8 +29,9 @@
 .orderinfo {
   display: flex;
   flex-direction: row;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
+  padding-right: 50px;
 }
 
 .element {
@@ -47,4 +48,11 @@
 .moneyicon {
   height: 36px;
   width: 36px;
+}
+
+.listsection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
 }

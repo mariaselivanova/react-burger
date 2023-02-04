@@ -1,4 +1,6 @@
 import FoodCardStyle from './FoodCard.module.css';
+import PropTypes from 'prop-types';
+// eslint-disable-next-line no-unused-vars
 import { CurrencyIcon, Counter, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 
 function FoodCard({ img, price, name }) {
@@ -14,5 +16,11 @@ function FoodCard({ img, price, name }) {
     </article>
   )
 }
+
+FoodCard.propTypes = {
+  img: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired
+};
 
 export default FoodCard

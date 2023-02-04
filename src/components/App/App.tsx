@@ -7,7 +7,7 @@ import { burgerData } from '../../utils/data';
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <AppHeader />
       <main className={AppStyle.main}>
         <BurgerIngredients burgerData={burgerData} />
