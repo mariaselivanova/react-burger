@@ -1,0 +1,44 @@
+.header {
+  background: #1C1C21;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  width: 85%;
+  align-items: center;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+.navlist {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  width: 100%;
+}
+
+.navsection {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  padding: 0;
+}
+
+.icon {
+  padding-right: 8px;
+}
+
+.listitem {
+  display: flex;
+  flex-direction: row;
+  text-decoration: none;
+  color: #F2F2F3
+}
+
+.logo {
+  padding-right: 170px;
+}
