@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { Tab, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredientsStyle from './BurgerIngredients.module.css';
 import FoodCard from '../FoodCard/FoodCard';
 import PropTypes from 'prop-types';
-import { foodElementPropTypes } from '../../utils/data';
+import { foodElementPropTypes } from '../../utils/prop-types';
 
-function BurgerIngredients({ burgerData }) {
+function BurgerIngredients({ burgerData, onCardClick }) {
   const [current, setCurrent] = React.useState('Булки');
-  const buns = burgerData.filter((item) => item.type === 'bun');
-  const mains = burgerData.filter((item) => item.type === 'main');
-  const sauces = burgerData.filter((item) => item.type === 'sauce');
+  const buns = useMemo(() => burgerData.filter((item) => item.type === 'bun'), [burgerData]);
+  const mains = useMemo(() => burgerData.filter((item) => item.type === 'main'), [burgerData]);
+  const sauces = useMemo(() => burgerData.filter((item) => item.type === 'sauce'), [burgerData]);
 
   return (
     <section className={`${BurgerIngredientsStyle.section} mt-10`}>
@@ -38,9 +38,8 @@ function BurgerIngredients({ burgerData }) {
           {buns.map((data) => (
             <FoodCard
               key={data._id}
-              img={data.image}
-              price={data.price}
-              name={data.name} />
+              card={data}
+              onCardClick={onCardClick} />
           ))
           }
         </div>
@@ -49,9 +48,8 @@ function BurgerIngredients({ burgerData }) {
           {sauces.map((data) => (
             <FoodCard
               key={data._id}
-              img={data.image}
-              price={data.price}
-              name={data.name} />
+              card={data}
+              onCardClick={onCardClick} />
           ))
           }
         </div>
@@ -60,9 +58,8 @@ function BurgerIngredients({ burgerData }) {
           {mains.map((data) => (
             <FoodCard
               key={data._id}
-              img={data.image}
-              price={data.price}
-              name={data.name} />
+              card={data}
+              onCardClick={onCardClick} />
           ))
           }
         </div>
@@ -72,7 +69,8 @@ function BurgerIngredients({ burgerData }) {
 }
 
 BurgerIngredients.propTypes = {
-  burgerData: PropTypes.arrayOf(foodElementPropTypes).isRequired
+  burgerData: PropTypes.arrayOf(foodElementPropTypes.isRequired).isRequired,
+  onCardClick: PropTypes.func.isRequired
 };
 
 export default BurgerIngredients
