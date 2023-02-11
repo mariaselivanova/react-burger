@@ -5,7 +5,7 @@ import { foodElementPropTypes } from '../../utils/prop-types';
 
 function IngredientDetails({ card }) {
   return (
-    <div>
+    <div className={IngredientDetailsStyle.container}>
       <img src={card.image_large} alt={card.name} />
       <h3 className={`${IngredientDetailsStyle.name} text text_type_main-medium`}>
         {card.name}

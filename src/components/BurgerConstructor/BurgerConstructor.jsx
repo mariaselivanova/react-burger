@@ -6,8 +6,10 @@ import FoodElement from "../FoodElement/FoodElement";
 import MoneyIcon from '../../images/iconMoney.svg';
 import PropTypes from 'prop-types';
 import { foodElementPropTypes } from '../../utils/prop-types';
+import Modal from "../Modal/Modal";
+import OrderDetails from "../OrderDetails/OrderDetails";
 
-function BurgerConstructor({ burgerData, onButtonClick }) {
+function BurgerConstructor({ burgerData, onButtonClick, open, onClose }) {
 
   const bun = useMemo(() => burgerData.find(ingredient => ingredient.type === 'bun'), [burgerData]);
   const ingredients = useMemo(() => burgerData.filter(ingredient => ingredient.type !== 'bun'), [burgerData]);
@@ -16,10 +18,10 @@ function BurgerConstructor({ burgerData, onButtonClick }) {
   }
 
   return (
+    <>
     <section className={`${BurgerConstructorStyle.section} pt-25`}>
       <div className={BurgerConstructorStyle.listsection}>
         {bun && <FoodElement
-          element={bun}
           type="top"
           name={`${bun.name} (верх)`}
           isLocked={true}
@@ -29,7 +31,6 @@ function BurgerConstructor({ burgerData, onButtonClick }) {
         <div className={BurgerConstructorStyle.list}>
           {ingredients.map((element) => (
             <FoodElement
-              element={element}
               key={element._id}
               type={element.type}
               name={element.name}
@@ -40,7 +41,6 @@ function BurgerConstructor({ burgerData, onButtonClick }) {
           ))}
         </div>
         {bun && <FoodElement
-          element={bun}
           type="bottom"
           name={`${bun.name} (низ)`}
           isLocked={true}
@@ -60,6 +60,10 @@ function BurgerConstructor({ burgerData, onButtonClick }) {
         </Button>
       </div>
     </section>
+    {open && <Modal open={open} onClose={onClose}>
+      <OrderDetails/>
+    </Modal>}
+    </>
   )
 }
 

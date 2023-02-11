@@ -3,49 +3,33 @@ import AppStyle from './App.module.css';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
-import { API_URL } from '../../utils/data';
-import Modal from '../Modal/Modal';
-import IngredientDetails from '../IngredientDetails/IngredientDetails';
-import OrderDetails from '../OrderDetails/OrderDetails';
+import burgerApi from '../../utils/burger-api';
 
 function App() {
-
-  const [ingredients, setIngredients] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isIngredientPopupOpen, setIsIngredientPopupOpen] = useState(false);
+  const [isOrderDetailsPopupOpen, setIsOrderDetailsPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
-    getAllIngredients()
+    burgerApi.getAllIngredients()
       .then((food) => setIngredients(food.data))
       .catch((err) => console.log(err));
   }, [])
 
-  const getAllIngredients = () => {
-    return fetch(API_URL)
-      .then((res) => {
-        if (res.ok) {
-          return res.json()
-        }
-        return Promise.reject(`Ошибка: ${res.status}`)
-      })
+  function openOrderDetailsPopup() {
+    setIsOrderDetailsPopupOpen(true);
   }
 
-  function openPopup() {
-    setIsOpen(true);
-  }
-
-  function closePopup() {
-    setIsOpen(false)
-  }
-
-  function closeCardPopup() {
-    closePopup()
-    setSelectedCard(null)
-  }
-
-  function handleCardClick(card) {
+  function openIngredientDetailsPopup(card) {
+    setIsIngredientPopupOpen(true);
     setSelectedCard(card);
-    openPopup()
+  }
+
+  function closeAllPopups() {
+    setIsOrderDetailsPopupOpen(false)
+    setIsIngredientPopupOpen(false);
+    setSelectedCard(null)
   }
 
   return (
@@ -54,17 +38,16 @@ function App() {
       <main className={AppStyle.main}>
         <BurgerIngredients
           burgerData={ingredients}
-          onCardClick={handleCardClick} />
+          onClose={closeAllPopups}
+          onCardClick={openIngredientDetailsPopup}
+          card={selectedCard}
+          open={isIngredientPopupOpen} />
         <BurgerConstructor
           burgerData={ingredients}
-          onButtonClick={openPopup} />
+          onClose={closeAllPopups}
+          onButtonClick={openOrderDetailsPopup}
+          open={isOrderDetailsPopupOpen} />
       </main>
-      <Modal
-        open={isOpen}
-        onClose={selectedCard ? closeCardPopup : closePopup}
-        title={selectedCard ? "Детали ингредиента" : ""}>
-        {selectedCard ? <IngredientDetails card={selectedCard} /> : <OrderDetails />}
-      </Modal>
     </div>
   );
 }

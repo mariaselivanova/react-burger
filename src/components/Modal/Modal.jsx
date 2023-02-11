@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import ModalStyle from './Modal.module.css';
 import ModalOverlay from "../ModalOverlay/ModalOverlay";
@@ -22,14 +22,12 @@ function Modal({ children, open, onClose, title }) {
     return () => document.removeEventListener('keydown', closeByEscape)
   }, [open, onClose]);
 
-  if (!open) return null
-
   return ReactDOM.createPortal(
     (
       <>
-        <ModalOverlay onClose={onClose} open={open} />
+        <ModalOverlay onClose={onClose} />
         <div className={ModalStyle.container}>
-          <h2 className={`${ModalStyle.title} text text_type_main-large`}>{title}</h2>
+          {title && <h2 className={`${ModalStyle.title} text text_type_main-large`}>{title}</h2>}
           <button onClick={onClose} className={ModalStyle.button}><CloseIcon type="primary" /></button>
           {children}
         </div>
@@ -41,7 +39,8 @@ function Modal({ children, open, onClose, title }) {
 Modal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string,
+  children: PropTypes.node.isRequired
 }
 
 export default Modal

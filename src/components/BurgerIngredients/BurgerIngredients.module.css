@@ -12,6 +12,7 @@
 .ingredients {
   overflow-y: scroll;
   max-height: 55vh;
+  scroll-behavior: smooth;
 }
 
 .ingredients::-webkit-scrollbar-track {
