@@ -5,7 +5,7 @@ class BurgerApi {
     this._headers = config.headers;
   }
 
-  _handleRes(res) {
+  _checkRes(res) {
     return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
   }
 
@@ -13,7 +13,7 @@ class BurgerApi {
     return fetch(`${API_URL}ingredients`, {
       method: 'GET',
       headers: this._headers
-    }).then((res) => this._handleRes(res))
+    }).then((res) => this._checkRes(res))
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { Tab, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredientsStyle from './BurgerIngredients.module.css';
@@ -8,11 +8,23 @@ import { foodElementPropTypes } from '../../utils/prop-types';
 import Modal from '../Modal/Modal';
 import IngredientDetails from '../IngredientDetails/IngredientDetails';
 
-function BurgerIngredients({ burgerData, onCardClick, open, onClose, card }) {
+function BurgerIngredients({ burgerData }) {
   const [current, setCurrent] = React.useState('Булки');
+  const [isIngredientPopupOpen, setIsIngredientPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
   const buns = useMemo(() => burgerData.filter((item) => item.type === 'bun'), [burgerData]);
   const mains = useMemo(() => burgerData.filter((item) => item.type === 'main'), [burgerData]);
   const sauces = useMemo(() => burgerData.filter((item) => item.type === 'sauce'), [burgerData]);
+
+  function closeIngredientPopup() {
+    setIsIngredientPopupOpen(false);
+    setSelectedCard(null)
+  }
+
+  function openIngredientPopup(card) {
+    setIsIngredientPopupOpen(true);
+    setSelectedCard(card);
+  }
 
   return (
     <>
@@ -42,7 +54,7 @@ function BurgerIngredients({ burgerData, onCardClick, open, onClose, card }) {
               <FoodCard
                 key={data._id}
                 card={data}
-                onCardClick={onCardClick} />
+                onCardClick={openIngredientPopup} />
             ))
             }
           </div>
@@ -52,7 +64,7 @@ function BurgerIngredients({ burgerData, onCardClick, open, onClose, card }) {
               <FoodCard
                 key={data._id}
                 card={data}
-                onCardClick={onCardClick} />
+                onCardClick={openIngredientPopup} />
             ))
             }
           </div>
@@ -62,14 +74,14 @@ function BurgerIngredients({ burgerData, onCardClick, open, onClose, card }) {
               <FoodCard
                 key={data._id}
                 card={data}
-                onCardClick={onCardClick} />
+                onCardClick={openIngredientPopup} />
             ))
             }
           </div>
         </div>
       </section>
-      {open && <Modal open={open} onClose={onClose} title="Детали ингредиента" >
-        <IngredientDetails card={card} />
+      {isIngredientPopupOpen && <Modal onClose={closeIngredientPopup} title="Детали ингредиента" >
+        <IngredientDetails card={selectedCard} />
       </Modal>}
     </>
   )
@@ -77,7 +89,6 @@ function BurgerIngredients({ burgerData, onCardClick, open, onClose, card }) {
 
 BurgerIngredients.propTypes = {
   burgerData: PropTypes.arrayOf(foodElementPropTypes.isRequired).isRequired,
-  onCardClick: PropTypes.func.isRequired
 };
 
 export default BurgerIngredients

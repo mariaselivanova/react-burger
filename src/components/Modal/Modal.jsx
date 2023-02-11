@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PropTypes from 'prop-types';
 import ModalStyle from './Modal.module.css';
 import ModalOverlay from "../ModalOverlay/ModalOverlay";
@@ -8,10 +8,9 @@ import { CloseIcon, Typography } from '@ya.praktikum/react-developer-burger-ui-c
 
 const portal = document.getElementById("portal");
 
-function Modal({ children, open, onClose, title }) {
+function Modal({ children, onClose, title }) {
 
   useEffect(() => {
-    if (!open) return;
     const closeByEscape = (e) => {
       if (e.key === 'Escape') {
         onClose();
@@ -20,7 +19,7 @@ function Modal({ children, open, onClose, title }) {
 
     document.addEventListener('keydown', closeByEscape)
     return () => document.removeEventListener('keydown', closeByEscape)
-  }, [open, onClose]);
+  }, [onClose]);
 
   return ReactDOM.createPortal(
     (
@@ -37,7 +36,6 @@ function Modal({ children, open, onClose, title }) {
 }
 
 Modal.propTypes = {
-  open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string,
   children: PropTypes.node.isRequired

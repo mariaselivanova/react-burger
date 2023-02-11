@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import BurgerConstructorStyle from "./BurgerConstructor.module.css";
 // eslint-disable-next-line no-unused-vars
 import { Box, Typography, Button } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -9,12 +9,23 @@ import { foodElementPropTypes } from '../../utils/prop-types';
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
 
-function BurgerConstructor({ burgerData, onButtonClick, open, onClose }) {
+function BurgerConstructor({ burgerData }) {
+  const [isOrderDetailsPopupOpen, setIsOrderDetailsPopupOpen] = useState(false);
 
   const bun = useMemo(() => burgerData.find(ingredient => ingredient.type === 'bun'), [burgerData]);
   const ingredients = useMemo(() => burgerData.filter(ingredient => ingredient.type !== 'bun'), [burgerData]);
+
   const burgerSum = () => {
     return bun.price * 2 + ingredients.reduce((sum, current) => sum + current.price, 0)
+  }
+
+  function openOrderDetailsPopup() {
+    setIsOrderDetailsPopupOpen(true);
+  }
+
+
+  function closeOrderDetailsPopup() {
+    setIsOrderDetailsPopupOpen(false)
   }
 
   return (
@@ -55,12 +66,12 @@ function BurgerConstructor({ burgerData, onButtonClick, open, onClose }) {
           </p>
           <img src={MoneyIcon} alt="" className={BurgerConstructorStyle.moneyicon} />
         </div>
-        <Button htmlType="button" type="primary" size="medium" onClick={onButtonClick}>
+        <Button htmlType="button" type="primary" size="medium" onClick={openOrderDetailsPopup}>
           Оформить заказ
         </Button>
       </div>
     </section>
-    {open && <Modal open={open} onClose={onClose}>
+    {isOrderDetailsPopupOpen && <Modal onClose={closeOrderDetailsPopup}>
       <OrderDetails/>
     </Modal>}
     </>
@@ -69,7 +80,6 @@ function BurgerConstructor({ burgerData, onButtonClick, open, onClose }) {
 
 BurgerConstructor.propTypes = {
   burgerData: PropTypes.arrayOf(foodElementPropTypes.isRequired).isRequired,
-  onButtonClick: PropTypes.func.isRequired
 };
 
 export default BurgerConstructor

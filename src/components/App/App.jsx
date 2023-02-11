@@ -6,9 +6,6 @@ import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import burgerApi from '../../utils/burger-api';
 
 function App() {
-  const [isIngredientPopupOpen, setIsIngredientPopupOpen] = useState(false);
-  const [isOrderDetailsPopupOpen, setIsOrderDetailsPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(null);
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
@@ -17,36 +14,14 @@ function App() {
       .catch((err) => console.log(err));
   }, [])
 
-  function openOrderDetailsPopup() {
-    setIsOrderDetailsPopupOpen(true);
-  }
-
-  function openIngredientDetailsPopup(card) {
-    setIsIngredientPopupOpen(true);
-    setSelectedCard(card);
-  }
-
-  function closeAllPopups() {
-    setIsOrderDetailsPopupOpen(false)
-    setIsIngredientPopupOpen(false);
-    setSelectedCard(null)
-  }
-
   return (
     <div>
       <AppHeader />
       <main className={AppStyle.main}>
         <BurgerIngredients
-          burgerData={ingredients}
-          onClose={closeAllPopups}
-          onCardClick={openIngredientDetailsPopup}
-          card={selectedCard}
-          open={isIngredientPopupOpen} />
+          burgerData={ingredients} />
         <BurgerConstructor
-          burgerData={ingredients}
-          onClose={closeAllPopups}
-          onButtonClick={openOrderDetailsPopup}
-          open={isOrderDetailsPopupOpen} />
+          burgerData={ingredients} />
       </main>
     </div>
   );
