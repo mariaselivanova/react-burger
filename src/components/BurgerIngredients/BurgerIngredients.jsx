@@ -12,13 +12,14 @@ function BurgerIngredients({ burgerData }) {
   const [current, setCurrent] = React.useState('Булки');
   const [isIngredientPopupOpen, setIsIngredientPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+
   const buns = useMemo(() => burgerData.filter((item) => item.type === 'bun'), [burgerData]);
   const mains = useMemo(() => burgerData.filter((item) => item.type === 'main'), [burgerData]);
   const sauces = useMemo(() => burgerData.filter((item) => item.type === 'sauce'), [burgerData]);
 
   function closeIngredientPopup() {
     setIsIngredientPopupOpen(false);
-    setSelectedCard(null)
+    setSelectedCard(null);
   }
 
   function openIngredientPopup(card) {

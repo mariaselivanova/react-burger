@@ -8,7 +8,7 @@ function FoodCard({ card, onCardClick }) {
 
   function handleCardClick() {
     onCardClick(card)
-  };
+  }
 
   return (
     <article className={FoodCardStyle.card} onClick={handleCardClick}>

@@ -1,12 +1,13 @@
 import OrderDetailsStyle from './OrderDetails.module.css';
 // eslint-disable-next-line no-unused-vars
 import { Typography } from '@ya.praktikum/react-developer-burger-ui-components';
+import PropTypes from 'prop-types';
 
-function OrderDetails() {
+function OrderDetails({ orderNumber }) {
   return (
     <div className={OrderDetailsStyle.container}>
       <h2 className={`${OrderDetailsStyle.ordernumber} text text_type_digits-large`}>
-        034536
+        {orderNumber}
       </h2>
       <h3 className={`${OrderDetailsStyle.orderid} text text_type_main-medium`}>
         идентификатор заказа
@@ -21,5 +22,9 @@ function OrderDetails() {
     </div>
   )
 }
+
+OrderDetails.propTypes = {
+  orderNumber: PropTypes.number.isRequired,
+};
 
 export default OrderDetails

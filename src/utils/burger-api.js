@@ -15,6 +15,14 @@ class BurgerApi {
       headers: this._headers
     }).then((res) => this._checkRes(res))
   }
+
+  makeNewOrder(ingredients) {
+    return fetch(`${API_URL}orders`, {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify({ ingredients })
+    }).then((res) => this._checkRes(res))
+  }
 }
 
 const burgerApi = new BurgerApi({
