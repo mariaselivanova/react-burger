@@ -72,9 +72,9 @@ function BurgerConstructor() {
             thumbnail={bun.image_mobile}
           />}
           <div className={BurgerConstructorStyle.list}>
-            {filling.map((element) => (
+            {filling.map((element, index) => (
               <FoodElement
-                key={element._id}
+                key={index}
                 type={element.type}
                 name={element.name}
                 isLocked={false}

@@ -9,6 +9,7 @@
   transform: translateZ(0);
   display: flex;
   margin-bottom: 30px;
+  align-self: center;
 }
 
 @keyframes mulShdSpin {

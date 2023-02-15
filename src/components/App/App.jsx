@@ -5,14 +5,17 @@ import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import burgerApi from '../../utils/burger-api';
 import { BurgerIngredientsContext } from '../../contexts/BurgerIngredientsContext';
+import Loader from '../Loader/Loader';
 
 function App() {
   const [ingredients, setIngredients] = useState([]);
+  const [ingredientsLoading, setIngredientsLoading] = useState(true)
 
   useEffect(() => {
     burgerApi.getAllIngredients()
       .then((food) => setIngredients(food.data))
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setIngredientsLoading(false))
   }, [])
 
   return (
@@ -20,9 +23,14 @@ function App() {
       <div>
         <AppHeader />
         <main className={AppStyle.main}>
-          <BurgerIngredients />
-          <BurgerConstructor />
+          {ingredientsLoading ? <Loader /> :
+            <>
+              <BurgerIngredients />
+              <BurgerConstructor />
+            </>
+          }
         </main>
+
       </div>
     </BurgerIngredientsContext.Provider>
   );
