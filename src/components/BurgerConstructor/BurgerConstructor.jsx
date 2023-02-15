@@ -6,15 +6,16 @@ import FoodElement from "../FoodElement/FoodElement";
 import MoneyIcon from '../../images/iconMoney.svg';
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { ChosenIngredientsContext } from '../../contexts/ChosenIngredientsContext';
+import { BurgerIngredientsContext } from '../../contexts/BurgerIngredientsContext';
 import burgerApi from "../../utils/burger-api";
 const initialSum = { sum: 0 };
 
 function BurgerConstructor() {
-  const ingredients = useContext(ChosenIngredientsContext);
+  const ingredients = useContext(BurgerIngredientsContext);
 
   const [isOrderDetailsPopupOpen, setIsOrderDetailsPopupOpen] = useState(false);
   const [orderNumber, setOrderNumber] = useState(0);
+  const [isLoading, setIsLoading] = useState(false)
 
   const bun = useMemo(() => ingredients.find(ingredient => ingredient.type === 'bun'), [ingredients]);
   const filling = useMemo(() => ingredients.filter(ingredient => ingredient.type !== 'bun'), [ingredients]);
@@ -35,6 +36,7 @@ function BurgerConstructor() {
   }
 
   function getOrderNumber() {
+    setIsLoading(true)
     burgerApi.makeNewOrder(ingredients.map(item => item._id))
       .then((res) => {
         if (res.success) {
@@ -43,9 +45,10 @@ function BurgerConstructor() {
           return Promise.reject('Ошибка данных');
         }
       })
-      .catch((error) => {
-        return Promise.reject(error);
-      });
+      .catch((error) => console.log(error))
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   function openOrderDetailsPopup() {
@@ -101,7 +104,7 @@ function BurgerConstructor() {
         </div>
       </section>
       {isOrderDetailsPopupOpen && <Modal onClose={closeOrderDetailsPopup}>
-        <OrderDetails orderNumber={orderNumber} />
+        <OrderDetails orderNumber={orderNumber} isLoading={isLoading}/>
       </Modal>}
     </>
   )

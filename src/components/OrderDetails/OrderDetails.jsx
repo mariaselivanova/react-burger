@@ -2,12 +2,13 @@ import OrderDetailsStyle from './OrderDetails.module.css';
 // eslint-disable-next-line no-unused-vars
 import { Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
+import Loader from "../Loader/Loader";
 
-function OrderDetails({ orderNumber }) {
+function OrderDetails({ orderNumber, isLoading }) {
   return (
     <div className={OrderDetailsStyle.container}>
       <h2 className={`${OrderDetailsStyle.ordernumber} text text_type_digits-large`}>
-        {orderNumber}
+        {isLoading ? <Loader /> : orderNumber}
       </h2>
       <h3 className={`${OrderDetailsStyle.orderid} text text_type_main-medium`}>
         идентификатор заказа
