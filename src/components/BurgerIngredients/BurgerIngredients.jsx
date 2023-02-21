@@ -1,24 +1,25 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useContext } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { Tab, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredientsStyle from './BurgerIngredients.module.css';
 import FoodCard from '../FoodCard/FoodCard';
-import PropTypes from 'prop-types';
-import { foodElementPropTypes } from '../../utils/prop-types';
 import Modal from '../Modal/Modal';
 import IngredientDetails from '../IngredientDetails/IngredientDetails';
+import { BurgerIngredientsContext } from '../../contexts/BurgerIngredientsContext';
 
-function BurgerIngredients({ burgerData }) {
+function BurgerIngredients() {
+  const burgerData = useContext(BurgerIngredientsContext);
   const [current, setCurrent] = React.useState('Булки');
   const [isIngredientPopupOpen, setIsIngredientPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+
   const buns = useMemo(() => burgerData.filter((item) => item.type === 'bun'), [burgerData]);
   const mains = useMemo(() => burgerData.filter((item) => item.type === 'main'), [burgerData]);
   const sauces = useMemo(() => burgerData.filter((item) => item.type === 'sauce'), [burgerData]);
 
   function closeIngredientPopup() {
     setIsIngredientPopupOpen(false);
-    setSelectedCard(null)
+    setSelectedCard(null);
   }
 
   function openIngredientPopup(card) {
@@ -86,9 +87,5 @@ function BurgerIngredients({ burgerData }) {
     </>
   )
 }
-
-BurgerIngredients.propTypes = {
-  burgerData: PropTypes.arrayOf(foodElementPropTypes.isRequired).isRequired,
-};
 
 export default BurgerIngredients
