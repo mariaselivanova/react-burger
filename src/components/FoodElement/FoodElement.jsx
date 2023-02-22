@@ -2,7 +2,7 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import FoodElementStyle from './FoodElement.module.css';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { deleteIngredient } from "../../services/burger/burgerSlice";
+import { deleteIngredient } from "../../services/slices/constructorSlice";
 import { useRef } from 'react';
 import { useDrop, useDrag } from 'react-dnd';
 

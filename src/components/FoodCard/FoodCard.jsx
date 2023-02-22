@@ -8,15 +8,16 @@ import { useDrag } from 'react-dnd/dist/hooks';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { BUN } from '../../utils/data';
+import { getConstructor } from '../../services/slices/constructorSlice';
 
 function FoodCard({ card, onCardClick }) {
 
-  const constructor = useSelector(state => state.burger.constructor);
+  const constructor = useSelector(getConstructor);
   const [amount, setAmount] = useState(0);
   const [, drag] = useDrag(() => (
     {
       type: "object",
-      item: { id: card._id },
+      item: card,
       collect: (monitor) => ({
         didDrop: monitor.didDrop(),
       }),

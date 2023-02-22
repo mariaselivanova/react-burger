@@ -2,10 +2,11 @@ import IngredientDetailsStyle from './IngredientDetails.module.css';
 // eslint-disable-next-line no-unused-vars
 import { Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
+import { getIngredient } from '../../services/slices/ingredientSlice';
 
 function IngredientDetails() {
 
-  const ingredient = useSelector((state) => state.burger.ingredient);
+  const ingredient = useSelector(getIngredient);
 
   return (
     <div className={IngredientDetailsStyle.container}>

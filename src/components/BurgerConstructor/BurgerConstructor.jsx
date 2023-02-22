@@ -7,7 +7,8 @@ import FoodElement from "../FoodElement/FoodElement";
 import MoneyIcon from '../../images/iconMoney.svg';
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { getOrderNumber, addIngredient, setNewConstructorArray } from "../../services/burger/burgerSlice";
+import { setNewConstructorArray, addIngredient, getConstructor } from "../../services/slices/constructorSlice";
+import { getOrderNumber } from "../../services/slices/orderSlice";
 import { useDrop } from "react-dnd/dist/hooks";
 import { BUN } from "../../utils/data";
 
@@ -15,11 +16,11 @@ const initialSum = { sum: 0 };
 
 function BurgerConstructor() {
   const { v4: uuidv4 } = require('uuid');
-  const constructor = useSelector((state) => state.burger.constructor);
+  const constructor = useSelector(getConstructor);
   const dispatch = useDispatch();
   const [isOrderDetailsPopupOpen, setIsOrderDetailsPopupOpen] = useState(false);
 
-  const filling = useMemo(() => constructor.filter(ingredient => ingredient.type !== BUN), [constructor]);
+  const filling = useMemo(() => constructor.filter(ingredient => ingredient.type !== BUN), [constructor])
   const bun = useMemo(() => constructor.find(ingredient => ingredient.type === BUN), [constructor]);
 
   const totalSum = () => {
@@ -49,7 +50,7 @@ function BurgerConstructor() {
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "object",
-    drop: (item) => dispatch(addIngredient(item.id)),
+    drop: (item) => dispatch(addIngredient(item)),
     collect: (monitor) => ({
       isOver: !!monitor.isOver()
     })
@@ -67,7 +68,7 @@ function BurgerConstructor() {
     <>
       <section className={`${BurgerConstructorStyle.section} pt-25`} ref={drop}>
         {burgerSum.sum === 0 ?
-          <p style={{boxShadow: isOver && "0px 0px 16px rgba(51, 51, 255, 0.25), 0px 0px 8px rgba(51, 51, 255, 0.25), 0px 4px 32px rgba(51, 51, 255, 0.5)"}} className={`${BurgerConstructorStyle.paragraph} text text_type_main-medium ${!isOver && 'text_color_inactive'}`}>Здесь будет бургер</p>
+          <p style={{ boxShadow: isOver && "0px 0px 16px rgba(51, 51, 255, 0.25), 0px 0px 8px rgba(51, 51, 255, 0.25), 0px 4px 32px rgba(51, 51, 255, 0.5)" }} className={`${BurgerConstructorStyle.paragraph} text text_type_main-medium ${!isOver && 'text_color_inactive'}`}>Здесь будет бургер</p>
           :
           <div className={BurgerConstructorStyle.listsection}>
             {bun && <FoodElement

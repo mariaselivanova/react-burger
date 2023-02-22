@@ -7,14 +7,16 @@ import BurgerIngredientsStyle from './BurgerIngredients.module.css';
 import FoodCard from '../FoodCard/FoodCard';
 import Modal from '../Modal/Modal';
 import IngredientDetails from '../IngredientDetails/IngredientDetails';
-import { getIngredients, setSelectedIngredient, clearSelectedIngredient } from '../../services/burger/burgerSlice';
+import { getIngredients } from '../../services/slices/ingredientsSlice';
+import { setSelectedIngredient, clearSelectedIngredient } from '../../services/slices/ingredientSlice';
 import Loader from '../Loader/Loader';
 import { useInView } from "react-intersection-observer";
+import { getInitialIngredients, getisIngredientArrayLoading } from '../../services/slices/ingredientsSlice';
 
 function BurgerIngredients() {
 
-  const { ingredients } = useSelector((store) => store.burger);
-  const isLoading = useSelector((state) => state.burger.isLoading);
+  const isLoading = useSelector(getisIngredientArrayLoading);
+  const ingredients = useSelector(getInitialIngredients)
   const dispatch = useDispatch();
 
   const [isIngredientPopupOpen, setIsIngredientPopupOpen] = useState(false);
@@ -42,7 +44,7 @@ function BurgerIngredients() {
   }
 
   const handleButtonClick = (ref) =>
-  ref.current.scrollIntoView({
+    ref.current.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
       inline: 'nearest',

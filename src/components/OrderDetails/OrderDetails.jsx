@@ -3,10 +3,12 @@ import OrderDetailsStyle from './OrderDetails.module.css';
 import { Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 import Loader from "../Loader/Loader";
 import { useSelector } from 'react-redux';
+import { getOrder, getOrderLoading } from '../../services/slices/orderSlice';
 
 function OrderDetails() {
 
-  const { isOrderNumberLoading, order } = useSelector((state) => state.burger)
+  const order = useSelector(getOrder);
+  const isOrderNumberLoading = useSelector(getOrderLoading)
 
   return (
     <div className={OrderDetailsStyle.container}>
