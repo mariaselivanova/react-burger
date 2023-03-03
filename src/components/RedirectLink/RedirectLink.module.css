@@ -1,0 +1,13 @@
+.redirect {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 16px;
+}
+
+.link {
+  text-decoration: none;
+  color: #4C4CFF;
+}

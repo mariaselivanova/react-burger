@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { BUN } from '../../utils/data';
 
 const initialState = {
-  constructor: []
+  constructor: [],
 }
 
 const constructorSlice = createSlice({
@@ -27,8 +27,7 @@ const constructorSlice = createSlice({
     setNewConstructorArray: (state, action) => {
       const bun = state.constructor.find(item => item.type === BUN)
       bun ? state.constructor = [...action.payload, bun] : state.constructor = [...action.payload]
-    }
-
+    },
   },
 })
 
@@ -39,6 +38,7 @@ export default constructorReducer
 export const {
   addIngredient,
   deleteIngredient,
-  setNewConstructorArray } = constructorSlice.actions;
+  setNewConstructorArray,
+  countIngredients } = constructorSlice.actions;
 
 export const getConstructor = state => state.constructorArray.constructor;

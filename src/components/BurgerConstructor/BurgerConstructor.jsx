@@ -20,7 +20,7 @@ function BurgerConstructor() {
   const dispatch = useDispatch();
   const [isOrderDetailsPopupOpen, setIsOrderDetailsPopupOpen] = useState(false);
 
-  const filling = useMemo(() => constructor.filter(ingredient => ingredient.type !== BUN), [constructor])
+  const filling = useMemo(() => constructor.filter(ingredient => ingredient.type !== BUN), [constructor]);
   const bun = useMemo(() => constructor.find(ingredient => ingredient.type === BUN), [constructor]);
 
   const totalSum = () => {

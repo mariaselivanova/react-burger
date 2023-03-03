@@ -11,7 +11,6 @@ import { BUN } from '../../utils/data';
 import { getConstructor } from '../../services/slices/constructorSlice';
 
 function FoodCard({ card, onCardClick }) {
-
   const constructor = useSelector(getConstructor);
   const [amount, setAmount] = useState(0);
   const [, drag] = useDrag(() => (
