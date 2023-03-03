@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   margin-left: 27px;
+  height: 70vh;
 }
 
 .list {
@@ -10,8 +11,8 @@
   flex-direction: column;
   gap: 15px;
   overflow-y: scroll;
+  padding-right: 30px;
   max-height: 31vh;
-  padding-right: 17px;
 }
 
 .list::-webkit-scrollbar-track {
@@ -55,4 +56,14 @@
   flex-direction: column;
   align-items: center;
   gap: 15px;
+  height: 55vh;
+}
+
+.paragraph {
+  text-align: center;
+  padding-top: 120px;
+  padding-bottom: 120px;
+  border-radius: 70px;
+  margin-top: 50px;
+  text-shadow: 0px 0px 16px rgba(51, 51, 255, 0.25), 0px 0px 8px rgba(51, 51, 255, 0.25), 0px 4px 32px rgba(51, 51, 255, 0.5);
 }

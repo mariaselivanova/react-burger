@@ -1,88 +1,123 @@
-import React, { useMemo, useState, useContext } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useMemo, useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 // eslint-disable-next-line no-unused-vars
 import { Tab, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredientsStyle from './BurgerIngredients.module.css';
 import FoodCard from '../FoodCard/FoodCard';
 import Modal from '../Modal/Modal';
 import IngredientDetails from '../IngredientDetails/IngredientDetails';
-import { BurgerIngredientsContext } from '../../contexts/BurgerIngredientsContext';
+import { getIngredients } from '../../services/slices/ingredientsSlice';
+import { setSelectedIngredient, clearSelectedIngredient } from '../../services/slices/ingredientSlice';
+import Loader from '../Loader/Loader';
+import { useInView } from "react-intersection-observer";
+import { getInitialIngredients, getisIngredientArrayLoading } from '../../services/slices/ingredientsSlice';
 
 function BurgerIngredients() {
-  const burgerData = useContext(BurgerIngredientsContext);
-  const [current, setCurrent] = React.useState('Булки');
-  const [isIngredientPopupOpen, setIsIngredientPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(null);
 
-  const buns = useMemo(() => burgerData.filter((item) => item.type === 'bun'), [burgerData]);
-  const mains = useMemo(() => burgerData.filter((item) => item.type === 'main'), [burgerData]);
-  const sauces = useMemo(() => burgerData.filter((item) => item.type === 'sauce'), [burgerData]);
+  const isLoading = useSelector(getisIngredientArrayLoading);
+  const ingredients = useSelector(getInitialIngredients)
+  const dispatch = useDispatch();
+
+  const [isIngredientPopupOpen, setIsIngredientPopupOpen] = useState(false);
+
+  const buns = useMemo(() => ingredients.filter((item) => item.type === 'bun'), [ingredients]);
+  const mains = useMemo(() => ingredients.filter((item) => item.type === 'main'), [ingredients]);
+  const sauces = useMemo(() => ingredients.filter((item) => item.type === 'sauce'), [ingredients]);
+
+  const [refBuns, inViewBuns] = useInView({ threshold: 0.05 });
+  const [refSauces, inViewSauces] = useInView({ threshold: 0.05 });
+  const [refMains, inViewMains] = useInView({ threshold: 0.05 });
+
+  const bunRefHeader = useRef();
+  const sauceRefHeader = useRef();
+  const mainRefHeader = useRef();
+
+  const activeTab = () => {
+    if (inViewBuns) {
+      return 1
+    } else if (inViewSauces) {
+      return 2
+    } else if (inViewMains) {
+      return 3
+    }
+  }
+
+  const handleButtonClick = (ref) =>
+    ref.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest',
+    })
 
   function closeIngredientPopup() {
     setIsIngredientPopupOpen(false);
-    setSelectedCard(null);
+    dispatch(clearSelectedIngredient());
   }
 
   function openIngredientPopup(card) {
     setIsIngredientPopupOpen(true);
-    setSelectedCard(card);
+    dispatch(setSelectedIngredient(card));
   }
+
+  useEffect(() => {
+    dispatch(getIngredients())
+  }, [])
 
   return (
     <>
       <section className={`${BurgerIngredientsStyle.section} mt-10`}>
         <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
         <nav className={BurgerIngredientsStyle.nav}>
-          <a href="#buns" className={BurgerIngredientsStyle.link}>
-            <Tab value="Булки" active={current === 'Булки'} onClick={setCurrent}>
-              Булки
-            </Tab>
-          </a>
-          <a href="#sauce" className={BurgerIngredientsStyle.link}>
-            <Tab value="Соусы" active={current === 'Соусы'} onClick={setCurrent}>
-              Соусы
-            </Tab>
-          </a>
-          <a href="#main" className={BurgerIngredientsStyle.link}>
-            <Tab value="Начинки" active={current === 'Начинки'} onClick={setCurrent}>
-              Начинки
-            </Tab>
-          </a>
+          <Tab value="buns" active={activeTab() === 1} onClick={() => handleButtonClick(bunRefHeader)}>
+            Булки
+          </Tab>
+          <Tab value="sauces" active={activeTab() === 2} onClick={() => handleButtonClick(sauceRefHeader)}>
+            Соусы
+          </Tab>
+          <Tab value="mains" active={activeTab() === 3} onClick={() => handleButtonClick(mainRefHeader)}>
+            Начинки
+          </Tab>
         </nav>
-        <div className={`${BurgerIngredientsStyle.ingredients} mt-10`}>
-          <h3 id="buns" className="text text_type_main-medium mb-6">Булки</h3>
-          <div className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
-            {buns.map((data) => (
-              <FoodCard
-                key={data._id}
-                card={data}
-                onCardClick={openIngredientPopup} />
-            ))
-            }
-          </div>
-          <h3 id="sauce" className="text text_type_main-medium mb-6 mt-10">Соусы</h3>
-          <div className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
-            {sauces.map((data) => (
-              <FoodCard
-                key={data._id}
-                card={data}
-                onCardClick={openIngredientPopup} />
-            ))
-            }
-          </div>
-          <h3 id="main" className="text text_type_main-medium mb-6 mt-10">Начинки</h3>
-          <div className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
-            {mains.map((data) => (
-              <FoodCard
-                key={data._id}
-                card={data}
-                onCardClick={openIngredientPopup} />
-            ))
-            }
-          </div>
+        <div className={`${BurgerIngredientsStyle.ingredients} ${isLoading && BurgerIngredientsStyle.loading} mt-10`}>
+          {isLoading ? <Loader />
+            :
+            <>
+              <h3 ref={bunRefHeader} id="buns" className="foodtype text text_type_main-medium mb-6">Булки</h3>
+              <div ref={refBuns} className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
+                {buns.map((data) => (
+                  <FoodCard
+                    key={data._id}
+                    card={data}
+                    onCardClick={openIngredientPopup} />
+                ))
+                }
+              </div>
+              <h3 ref={sauceRefHeader} id="sauce" className="text text_type_main-medium mb-6 mt-10">Соусы</h3>
+              <div ref={refSauces} className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
+                {sauces.map((data) => (
+                  <FoodCard
+                    key={data._id}
+                    card={data}
+                    onCardClick={openIngredientPopup} />
+                ))
+                }
+              </div>
+              <h3 ref={mainRefHeader} id="main" className="text text_type_main-medium mb-6 mt-10">Начинки</h3>
+              <div ref={refMains} className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
+                {mains.map((data) => (
+                  <FoodCard
+                    key={data._id}
+                    card={data}
+                    onCardClick={openIngredientPopup} />
+                ))
+                }
+              </div>
+            </>}
         </div>
       </section>
       {isIngredientPopupOpen && <Modal onClose={closeIngredientPopup} title="Детали ингредиента" >
-        <IngredientDetails card={selectedCard} />
+        <IngredientDetails />
       </Modal>}
     </>
   )

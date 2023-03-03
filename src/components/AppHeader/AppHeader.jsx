@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // TODO: Добавить валидные ссылки
 
-import React from "react";
 import AppHeaderStyle from './AppHeader.module.css';
 // eslint-disable-next-line no-unused-vars
 import { BurgerIcon, ListIcon, ProfileIcon, Typography, Logo, Box } from '@ya.praktikum/react-developer-burger-ui-components';
