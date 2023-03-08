@@ -1,25 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useMemo, useState, useEffect, useRef } from 'react';
+import React, { useMemo, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // eslint-disable-next-line no-unused-vars
 import { Tab, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredientsStyle from './BurgerIngredients.module.css';
 import FoodCard from '../FoodCard/FoodCard';
-import Modal from '../Modal/Modal';
-import IngredientDetails from '../IngredientDetails/IngredientDetails';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
-import { setSelectedIngredient, clearSelectedIngredient } from '../../services/slices/ingredientSlice';
 import Loader from '../Loader/Loader';
 import { useInView } from "react-intersection-observer";
 import { getInitialIngredients, getisIngredientArrayLoading } from '../../services/slices/ingredientsSlice';
 
 function BurgerIngredients() {
-
   const isLoading = useSelector(getisIngredientArrayLoading);
-  const ingredients = useSelector(getInitialIngredients)
+  const ingredients = useSelector(getInitialIngredients);
   const dispatch = useDispatch();
-
-  const [isIngredientPopupOpen, setIsIngredientPopupOpen] = useState(false);
 
   const buns = useMemo(() => ingredients.filter((item) => item.type === 'bun'), [ingredients]);
   const mains = useMemo(() => ingredients.filter((item) => item.type === 'main'), [ingredients]);
@@ -50,15 +44,6 @@ function BurgerIngredients() {
       inline: 'nearest',
     })
 
-  function closeIngredientPopup() {
-    setIsIngredientPopupOpen(false);
-    dispatch(clearSelectedIngredient());
-  }
-
-  function openIngredientPopup(card) {
-    setIsIngredientPopupOpen(true);
-    dispatch(setSelectedIngredient(card));
-  }
 
   useEffect(() => {
     dispatch(getIngredients())
@@ -87,9 +72,8 @@ function BurgerIngredients() {
               <div ref={refBuns} className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
                 {buns.map((data) => (
                   <FoodCard
-                    key={data._id}
                     card={data}
-                    onCardClick={openIngredientPopup} />
+                    key={data._id} />
                 ))
                 }
               </div>
@@ -97,9 +81,8 @@ function BurgerIngredients() {
               <div ref={refSauces} className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
                 {sauces.map((data) => (
                   <FoodCard
-                    key={data._id}
                     card={data}
-                    onCardClick={openIngredientPopup} />
+                    key={data._id} />
                 ))
                 }
               </div>
@@ -107,18 +90,14 @@ function BurgerIngredients() {
               <div ref={refMains} className={`${BurgerIngredientsStyle.foodcards} ml-4`}>
                 {mains.map((data) => (
                   <FoodCard
-                    key={data._id}
                     card={data}
-                    onCardClick={openIngredientPopup} />
+                    key={data._id} />
                 ))
                 }
               </div>
             </>}
         </div>
       </section>
-      {isIngredientPopupOpen && <Modal onClose={closeIngredientPopup} title="Детали ингредиента" >
-        <IngredientDetails />
-      </Modal>}
     </>
   )
 }

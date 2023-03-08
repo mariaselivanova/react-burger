@@ -8,18 +8,17 @@ import { CloseIcon, Typography } from '@ya.praktikum/react-developer-burger-ui-c
 
 const portal = document.getElementById("portal");
 
-function Modal({ children, onClose, title }) {
-
+function Modal({ children, title, onClose }) {
   useEffect(() => {
     const closeByEscape = (e) => {
       if (e.key === 'Escape') {
         onClose();
       }
     }
-
     document.addEventListener('keydown', closeByEscape)
     return () => document.removeEventListener('keydown', closeByEscape)
   }, [onClose]);
+
 
   return ReactDOM.createPortal(
     (
@@ -36,9 +35,9 @@ function Modal({ children, onClose, title }) {
 }
 
 Modal.propTypes = {
-  onClose: PropTypes.func.isRequired,
   title: PropTypes.string,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  onClose: PropTypes.func.isRequired,
 }
 
 export default Modal

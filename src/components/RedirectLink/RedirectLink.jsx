@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom"
-import RedirectLinkStyle from './RedirectLink.module.css'
+import { Link } from "react-router-dom";
+import RedirectLinkStyle from './RedirectLink.module.css';
+import PropTypes from 'prop-types';
 
 export function RedirectLink({ linktext, link, linkquestion }) {
   return (
@@ -8,4 +9,10 @@ export function RedirectLink({ linktext, link, linkquestion }) {
       <Link to={link} className={`${RedirectLinkStyle.link} text text_type_main-default`}>{linktext}</Link>
     </div>
   )
+}
+
+RedirectLink.propTypes = {
+  linktext: PropTypes.string,
+  link: PropTypes.string,
+  linkquestion: PropTypes.string,
 }

@@ -11,12 +11,16 @@ import { setNewConstructorArray, addIngredient, getConstructor } from "../../ser
 import { getOrderNumber } from "../../services/slices/orderSlice";
 import { useDrop } from "react-dnd/dist/hooks";
 import { BUN } from "../../utils/data";
+import { getUser } from "../../services/slices/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const initialSum = { sum: 0 };
 
 function BurgerConstructor() {
   const { v4: uuidv4 } = require('uuid');
   const constructor = useSelector(getConstructor);
+  const user = useSelector(getUser);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isOrderDetailsPopupOpen, setIsOrderDetailsPopupOpen] = useState(false);
 
@@ -39,6 +43,10 @@ function BurgerConstructor() {
   }
 
   function openOrderDetailsPopup() {
+    if (!user) {
+      navigate('/login')
+      return
+    }
     const ingredientsIds = constructor.map(item => item._id)
     dispatch(getOrderNumber(ingredientsIds));
     setIsOrderDetailsPopupOpen(true);
