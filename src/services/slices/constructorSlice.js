@@ -28,6 +28,9 @@ const constructorSlice = createSlice({
       const bun = state.constructor.find(item => item.type === BUN)
       bun ? state.constructor = [...action.payload, bun] : state.constructor = [...action.payload]
     },
+    clearConstructor: (state, action) => {
+      state.constructor = initialState.constructor
+    }
   },
 })
 
@@ -39,6 +42,7 @@ export const {
   addIngredient,
   deleteIngredient,
   setNewConstructorArray,
-  countIngredients } = constructorSlice.actions;
+  countIngredients,
+  clearConstructor } = constructorSlice.actions;
 
 export const getConstructor = state => state.constructorArray.constructor;

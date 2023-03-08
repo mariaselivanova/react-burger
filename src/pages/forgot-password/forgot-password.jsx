@@ -1,11 +1,12 @@
-import { FormElement } from "../components/FormElement/FormElement";
+import { FormElement } from "../../components/FormElement/FormElement";
 import { EmailInput } from "@ya.praktikum/react-developer-burger-ui-components";
-import { RedirectLink } from "../components/RedirectLink/RedirectLink";
+import { RedirectLink } from "../../components/RedirectLink/RedirectLink";
 import { useDispatch, useSelector } from "react-redux";
-import { findUserEmail, getFindUserError, getLoading } from "../services/slices/userSlice";
+import { findUserEmail, getFindUserError, getLoading } from "../../services/slices/userSlice";
 import { useLocation, useNavigate } from "react-router-dom";
-import Loader from "../components/Loader/Loader";
-import { useFormValidation } from "../hooks/useFormValidation";
+import Loader from "../../components/Loader/Loader";
+import { useFormValidation } from "../../hooks/useFormValidation";
+import ForgotPasswordStyle from './forgot-password.module.css';
 
 export function ForgotPasswordPage() {
   const { values, handleChange, isValid } = useFormValidation();
@@ -23,13 +24,8 @@ export function ForgotPasswordPage() {
       }
     });
   }
-
   if (loading) {
-    return (
-      <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", marginTop: "50vh" }}>
-        <Loader />
-      </div>
-    )
+    <Loader />
   }
 
   return (
@@ -54,10 +50,9 @@ export function ForgotPasswordPage() {
         link="/login"
         linkquestion="Вспомнили пароль?"
       />
-      {error && <p style={{ textAlign: 'center' }} className="text text_type_main-default text_color_inactive">
+      {error && <p className={`${ForgotPasswordStyle.errortext} text text_type_main-default text_color_inactive`}>
         Что-то пошло не так. {error.name}: {error.message}
       </p>}
     </>
-
   )
 }

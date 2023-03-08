@@ -43,3 +43,7 @@
   flex-direction: row;
   justify-content: flex-end;
 }
+
+.errortext {
+  text-align: center;
+}

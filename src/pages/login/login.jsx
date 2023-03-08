@@ -1,19 +1,21 @@
 // eslint-disable-next-line no-unused-vars
 import { EmailInput, PasswordInput, Typography } from '@ya.praktikum/react-developer-burger-ui-components';
-import { FormElement } from '../components/FormElement/FormElement';
-import { RedirectLink } from '../components/RedirectLink/RedirectLink';
+import { FormElement } from '../../components/FormElement/FormElement';
+import { RedirectLink } from '../../components/RedirectLink/RedirectLink';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { getLoading, getLoginError, handleLogin } from '../services/slices/userSlice';
-import Loader from '../components/Loader/Loader';
-import { useFormValidation } from "../hooks/useFormValidation";
+import { getLoading, getLoginError, handleLogin } from '../../services/slices/userSlice';
+import Loader from '../../components/Loader/Loader';
+import { useFormValidation } from "../../hooks/useFormValidation";
+import LoginStyle from './login.module.css';
 
 export function LoginPage() {
+  const Cookies = require('js-cookie');
   const { values, handleChange, isValid } = useFormValidation();
   const error = useSelector(getLoginError);
   const loading = useSelector(getLoading);
-  let location = useLocation();
-  let prevLocation = location.state && location.state.prevLocation;
+  const location = useLocation();
+  const prevLocation = location.state && location.state.prevLocation;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -21,32 +23,28 @@ export function LoginPage() {
     e.preventDefault()
     dispatch(handleLogin(values)).then(({ payload }) => {
       if (payload.success) {
-        const { from } = location.state || { from: { pathname: '/'}}
+        const { from } = location.state || { from: { pathname: '/' } }
         navigate(from)
-        localStorage.setItem('refreshToken', payload.refreshToken);
-        localStorage.setItem('accessToken', payload.accessToken);
+        Cookies.set('refreshToken', payload.refreshToken, { expires: 1 });
+        Cookies.set('accessToken', payload.accessToken.substring(7), { expires: 1 });
       }
     });
   }
 
   if (loading) {
     return (
-      <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", marginTop: "50vh" }}>
-        <Loader />
-      </div>
+      <Loader />
     )
   }
 
   return (
     <>
       {prevLocation && prevLocation.pathname === "/reset-password" &&
-        <p style={{ textAlign: 'center', paddingTop: '3vh' }}
-          className="text text_type_main-default text_color_inactive">
+        <p className={`${LoginStyle.successtext} text text_type_main-default text_color_inactive`}>
           Пароль был успешно изменен!
         </p>}
       {prevLocation && prevLocation.pathname === "/register" &&
-        <p style={{ textAlign: 'center', paddingTop: '3vh' }}
-          className="text text_type_main-default text_color_inactive">
+        <p className={`${LoginStyle.successtext} text text_type_main-default text_color_inactive`}>
           Вы успешно зарегистрированы!
         </p>}
       <FormElement
@@ -81,8 +79,7 @@ export function LoginPage() {
         linkquestion="Забыли пароль?"
       />
       {error &&
-        <p style={{ textAlign: 'center' }}
-          className="text text_type_main-default text_color_inactive">
+        <p className={`${LoginStyle.errortext} text text_type_main-default text_color_inactive`}>
           Что-то пошло не так. {error.name}: {error.message}
         </p>}
     </>

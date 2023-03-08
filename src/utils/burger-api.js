@@ -1,49 +1,49 @@
 import { API_URL } from "./data";
+import Cookies from 'js-cookie';
 
 class BurgerApi {
   constructor(config) {
     this._headers = config.headers;
   }
 
-  _request(url, options) {
-    return fetch(url, options).then(this._checkRes)
+  _request(endpoint, options) {
+    return fetch(`${API_URL}${endpoint}`, options).then(this._checkRes);
   }
 
-  _checkRes(res) {
+   _checkRes(res) {
     return res.ok ? res.json() : res.json().then((err) => Promise.reject(err))
   }
 
-  _requestWithNewToken = async (url, options) => {
+  _requestWithNewToken = async (endpoint, options) => {
     try {
-      const res = await this._request(url, options)
+      const res = await this._request(endpoint, options)
       return res
     }
     catch (err) {
       if (err.message === "jwt expired") {
         const newTokens = await this.updateToken()
-        localStorage.setItem("accessToken", newTokens.accessToken)
-        localStorage.setItem("refreshToken", newTokens.refreshToken)
+        Cookies.set("accessToken", newTokens.accessToken.substring(7), { expires: 1 })
+        Cookies.set("refreshToken", newTokens.refreshToken, { expires: 1 })
         if (newTokens) {
           options.headers.authorization = newTokens.accessToken
         }
-        return this._request(url, options)
+        return this._request(endpoint, options)
       } else {
         console.log(err)
-        localStorage.clear()
         return Promise.reject(err)
       }
     }
   }
 
   getAllIngredients() {
-    return this._request(`${API_URL}ingredients`, {
+    return this._request('ingredients', {
       method: 'GET',
       headers: this._headers
     })
   }
 
   makeNewOrder(ingredients) {
-    return this._request(`${API_URL}orders`, {
+    return this._request('orders', {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify({ ingredients })
@@ -51,7 +51,7 @@ class BurgerApi {
   }
 
   register(data) {
-    return this._request(`${API_URL}auth/register`, {
+    return this._request('auth/register', {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify(data)
@@ -59,7 +59,7 @@ class BurgerApi {
   }
 
   login(data) {
-    return this._request(`${API_URL}auth/login`, {
+    return this._request('auth/login', {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify(data)
@@ -67,7 +67,7 @@ class BurgerApi {
   }
 
   findUser(data) {
-    return this._request(`${API_URL}password-reset`, {
+    return this._request('password-reset', {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify(data)
@@ -75,7 +75,7 @@ class BurgerApi {
   }
 
   resetPassword(data) {
-    return this._request(`${API_URL}password-reset/reset`, {
+    return this._request('password-reset/reset', {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify(data)
@@ -83,7 +83,7 @@ class BurgerApi {
   }
 
   logout(data) {
-    return this._request(`${API_URL}auth/logout`, {
+    return this._request('auth/logout', {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify(data)
@@ -91,32 +91,32 @@ class BurgerApi {
   }
 
   getUserData() {
-    return this._requestWithNewToken(`${API_URL}auth/user`, {
+    return this._requestWithNewToken('auth/user', {
       method: 'GET',
       headers: {
         ...this._headers,
-        authorization: localStorage.getItem('accessToken'),
+        authorization: 'Bearer ' + Cookies.get('accessToken'),
       }
     })
   }
 
   changeUserData(data) {
-    return this._requestWithNewToken(`${API_URL}auth/user`, {
+    return this._requestWithNewToken('auth/user', {
       method: 'PATCH',
       headers: {
         ...this._headers,
-        authorization: localStorage.getItem('accessToken')
+        authorization: 'Bearer ' + Cookies.get('accessToken'),
       },
       body: JSON.stringify(data)
     })
   }
 
   updateToken() {
-    return this._request(`${API_URL}auth/token`, {
+    return this._request('auth/token', {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify({
-        token: localStorage.getItem("refreshToken"),
+        token: Cookies.get("refreshToken"),
       })
     })
   }

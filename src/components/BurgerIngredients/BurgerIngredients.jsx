@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useMemo, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useMemo, useRef } from 'react';
+import { useSelector } from 'react-redux';
 // eslint-disable-next-line no-unused-vars
 import { Tab, Typography, Box } from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerIngredientsStyle from './BurgerIngredients.module.css';
 import FoodCard from '../FoodCard/FoodCard';
-import { getIngredients } from '../../services/slices/ingredientsSlice';
 import Loader from '../Loader/Loader';
 import { useInView } from "react-intersection-observer";
 import { getInitialIngredients, getisIngredientArrayLoading } from '../../services/slices/ingredientsSlice';
@@ -13,7 +12,6 @@ import { getInitialIngredients, getisIngredientArrayLoading } from '../../servic
 function BurgerIngredients() {
   const isLoading = useSelector(getisIngredientArrayLoading);
   const ingredients = useSelector(getInitialIngredients);
-  const dispatch = useDispatch();
 
   const buns = useMemo(() => ingredients.filter((item) => item.type === 'bun'), [ingredients]);
   const mains = useMemo(() => ingredients.filter((item) => item.type === 'main'), [ingredients]);
@@ -43,11 +41,6 @@ function BurgerIngredients() {
       block: 'start',
       inline: 'nearest',
     })
-
-
-  useEffect(() => {
-    dispatch(getIngredients())
-  }, [])
 
   return (
     <>

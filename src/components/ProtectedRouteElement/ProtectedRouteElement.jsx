@@ -1,15 +1,16 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
 
 export const ProtectedRouteElement = ({ element, onlyNotAuth, onlyAfterForgotPassword }) => {
-  let location = useLocation();
-  let prevLocation = location.state && location.state.prevLocation;
+  const location = useLocation();
+  const prevLocation = location.state && location.state.prevLocation;
 
-  if (!onlyNotAuth && !localStorage.getItem("login")) {
+  if (!onlyNotAuth && !Cookies.get("accessToken")) {
     return <Navigate Navigate to='/login' state={{from: location}} replace />;
   }
 
-  if (onlyNotAuth && localStorage.getItem("login")) {
+  if (onlyNotAuth && Cookies.get("accessToken")) {
     return <Navigate to="/" replace />;
   }
 

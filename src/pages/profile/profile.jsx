@@ -2,10 +2,11 @@ import { EmailInput, PasswordInput, Input, Button } from "@ya.praktikum/react-de
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Loader from "../components/Loader/Loader";
-import { handleLogout, getUser, handleChangeUserData, getLogoutError, getLoading, getChangeUserDataError, getUserDataLoading } from "../services/slices/userSlice";
-import profileStyle from './profile.module.css';
-import { useFormValidation } from "../hooks/useFormValidation";
+import Loader from "../../components/Loader/Loader";
+import { handleLogout, getUser, handleChangeUserData, getLogoutError, getLoading, getChangeUserDataError, getUserDataLoading } from "../../services/slices/userSlice";
+import ProfileStyle from './profile.module.css';
+import { useFormValidation } from "../../hooks/useFormValidation";
+import Cookies from 'js-cookie';
 
 export function ProfilePage() {
   const { pathname } = useLocation();
@@ -18,13 +19,15 @@ export function ProfilePage() {
   const [successStatus, setSuccessStatus] = useState("");
   const { values, handleChange, setValues, resetForm, isValid } = useFormValidation();
   const dispatch = useDispatch();
-  const activeLinkStyle = `${profileStyle.activenavlink} text text_type_main-medium`;
-  const inactiveLinkStyle = `${profileStyle.navlink} text text_type_main-medium text_color_inactive`;
+  const activeLinkStyle = `${ProfileStyle.activenavlink} text text_type_main-medium`;
+  const inactiveLinkStyle = `${ProfileStyle.navlink} text text_type_main-medium text_color_inactive`;
 
   function handleUserLogout() {
-    dispatch(handleLogout({ token: localStorage.getItem("refreshToken") })).then(({ payload }) => {
+    dispatch(handleLogout({ token: Cookies.get("refreshToken") })).then(({ payload }) => {
       if (payload.success) {
         navigate('/login');
+        Cookies.remove("refreshToken");
+        Cookies.remove("accessToken");
       }
     })
   }
@@ -55,16 +58,14 @@ export function ProfilePage() {
 
   if (loading) {
     return (
-      <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", marginTop: "50vh" }}>
-        <Loader />
-      </div>
+      <Loader />
     )
   }
 
   return (
-    <div className={profileStyle.wrap}>
+    <div className={ProfileStyle.wrap}>
       <div>
-        <nav className={profileStyle.nav}>
+        <nav className={ProfileStyle.nav}>
           <Link
             className={pathname === "/profile" ? activeLinkStyle : inactiveLinkStyle}
             exact="true"
@@ -81,7 +82,7 @@ export function ProfilePage() {
           </Link>
           <button
             onClick={handleUserLogout}
-            className={`${profileStyle.button} text text_type_main-medium text_color_inactive`}>
+            className={`${ProfileStyle.button} text text_type_main-medium text_color_inactive`}>
             Выход
           </button>
         </nav>
@@ -90,9 +91,9 @@ export function ProfilePage() {
           В этом разделе вы можете изменить свои персональные данные
         </p>
       </div>
-      {userLoading ? <div style={{ display: 'flex', flexDirection: "row", justifyContent: "center" }}><Loader /></div> :
+      {userLoading ? <Loader /> :
         <form
-          className={profileStyle.form}
+          className={ProfileStyle.form}
           onSubmit={handleSubmit}>
           <Input
             type={'text'}
@@ -118,7 +119,7 @@ export function ProfilePage() {
             onChange={handleChange}
             minLength="6"
           />
-          {isChange() && <div className={profileStyle.buttons}>
+          {isChange() && <div className={ProfileStyle.buttons}>
             <Button
               htmlType="reset"
               onClick={handleReset}
@@ -136,7 +137,7 @@ export function ProfilePage() {
       <p className="text text_type_main-default text_color_inactive">
         {successStatus}
       </p>
-      {(error || userError) && <p style={{ textAlign: 'center' }} className="text text_type_main-default text_color_inactive">
+      {(error || userError) && <p className={`${ProfileStyle.errortext} text text_type_main-default text_color_inactive`}>
         Что-то пошло не так. {error.name}: {error.message}
       </p>}
     </div>

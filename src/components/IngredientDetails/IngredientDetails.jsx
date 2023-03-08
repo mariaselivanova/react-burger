@@ -4,35 +4,27 @@ import { Typography } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedIngredient, getIngredient } from '../../services/slices/ingredientSlice';
 import { useLocation, useParams } from 'react-router-dom';
-import { getIngredients, getInitialIngredients, getisIngredientArrayLoading } from '../../services/slices/ingredientsSlice';
+import { getInitialIngredients, getisIngredientArrayLoading } from '../../services/slices/ingredientsSlice';
 import { useEffect } from 'react';
 import Loader from '../Loader/Loader';
 
 function IngredientDetails() {
   const dispatch = useDispatch();
   const location = useLocation();
-  let background = location.state && location.state.background;
+  const background = location.state && location.state.background;
   const ingredients = useSelector(getInitialIngredients);
   const loading = useSelector(getisIngredientArrayLoading);
   const ingredient = useSelector(getIngredient);
 
-  let { id } = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
-    if (!ingredients.length) {
-      dispatch(getIngredients()).then(({ payload }) => {
-        dispatch(setSelectedIngredient(payload.data.find((ingredient) => ingredient._id === id)));
-      })
-    } else {
-      dispatch(setSelectedIngredient(ingredients.find((ingredient) => ingredient._id === id)));
-    }
-  }, [dispatch, ingredients, id]);
+    dispatch(setSelectedIngredient(ingredients.find((ingredient) => ingredient._id === id)));
+  }, [dispatch, id, ingredients]);
 
   if (loading) {
     return (
-      <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", marginTop: "50vh" }}>
-        <Loader />
-      </div>
+      <Loader />
     )
   }
 
@@ -40,7 +32,7 @@ function IngredientDetails() {
 
     return (
       <div className={!background ? IngredientDetailsStyle.wrap : IngredientDetailsStyle.container}>
-        {!background && <h2 style={{ marginBottom: "15px" }} className="text text_type_main-large">Детали ингредиента</h2>}
+        {!background && <h2 className={`${IngredientDetailsStyle.title} text text_type_main-large`}>Детали ингредиента</h2>}
         <img src={ingredient.image_large} alt={ingredient.name} />
         <h3 className={`${IngredientDetailsStyle.name} text text_type_main-medium`}>
           {ingredient.name}

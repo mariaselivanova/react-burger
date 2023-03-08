@@ -8,17 +8,22 @@ import { ProtectedRouteElement } from '../ProtectedRouteElement/ProtectedRouteEl
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import Modal from '../Modal/Modal';
 import { clearSelectedIngredient } from '../../services/slices/ingredientSlice';
+import { getIngredients } from '../../services/slices/ingredientsSlice';
 
 function App() {
   const user = useSelector(getUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let location = useLocation();
-  let background = location.state && location.state.background;
+  const location = useLocation();
+  const background = location.state && location.state.background;
 
   useEffect(() => {
     !user && dispatch(handleGetUserData())
   }, [user, dispatch])
+
+  useEffect(() => {
+    dispatch(getIngredients())
+  }, [dispatch])
 
   const closeIngredientModal = (e) => {
     navigate(-1)

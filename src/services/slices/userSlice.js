@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import burgerApi from '../../utils/burger-api';
+import Cookies from 'js-cookie';
 
 const initialState = {
   user: null,
@@ -46,8 +47,7 @@ export const handleLogout = createAsyncThunk(
 export const handleGetUserData = createAsyncThunk(
   "user/handleGetUserData",
   async () => {
-    if (!localStorage.getItem("login")) {
-      localStorage.clear()
+    if (!Cookies.get("refreshToken") && !Cookies.get("accessToken")) {
       return Promise.reject();
     }
     return burgerApi.getUserData();
@@ -56,13 +56,13 @@ export const handleGetUserData = createAsyncThunk(
 export const handleChangeUserData = createAsyncThunk(
   "user/handleChangeUserData",
   async (data) => {
-  return burgerApi.changeUserData(data);
+    return burgerApi.changeUserData(data);
   })
 
 export const handleRefreshToken = createAsyncThunk(
   "user/handleRefreshToken",
   async (data) => {
-  return burgerApi.updateToken(data);
+    return burgerApi.updateToken(data);
   })
 
 const userSlice = createSlice({
@@ -125,14 +125,12 @@ const userSlice = createSlice({
       state.user = action.payload.user
       state.loading = initialState.loading
       state.loginError = initialState.loginError
-      localStorage.setItem("login", true)
     },
     [handleLogin.rejected]: (state, { error }) => {
       state.user = initialState.user
       state.loading = initialState.loading
       state.loginError = error
       console.log(error)
-      localStorage.clear()
     },
 
     //logout
@@ -144,7 +142,6 @@ const userSlice = createSlice({
       state.loading = initialState.loading
       state.user = initialState.user
       state.logoutError = initialState.logoutError
-      localStorage.clear()
     },
     [handleLogout.rejected]: (state, { error }) => {
       state.loading = initialState.loading
@@ -159,7 +156,6 @@ const userSlice = createSlice({
     [handleGetUserData.fulfilled]: (state, action) => {
       state.user = action.payload.user
       state.userDataLoading = initialState.userDataLoading
-      localStorage.setItem("login", true)
     },
     [handleGetUserData.rejected]: (state, { error }) => {
       state.user = initialState.user

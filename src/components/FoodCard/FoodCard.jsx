@@ -37,7 +37,7 @@ function FoodCard({ card }) {
   }, [constructor])
 
   return (
-    <Link style={{ textDecoration: 'none' }} to={`/ingredients/${card._id}`}
+    <Link className={FoodCardStyle.link} to={`/ingredients/${card._id}`}
       state={{ background: location }}>
       <article className={FoodCardStyle.card} ref={drag}>
         {amount > 0 && <Counter count={amount} size="default" className={FoodCardStyle.counter} />}
