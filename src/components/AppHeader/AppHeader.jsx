@@ -1,11 +1,15 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-// TODO: Добавить валидные ссылки
-
 import AppHeaderStyle from './AppHeader.module.css';
 // eslint-disable-next-line no-unused-vars
 import { BurgerIcon, ListIcon, ProfileIcon, Typography, Logo, Box } from '@ya.praktikum/react-developer-burger-ui-components';
+import { NavLink, Link } from 'react-router-dom';
+import { getUser } from '../../services/slices/userSlice';
+import { useSelector } from 'react-redux';
 
 function AppHeader() {
+  const activeLinkStyle = "text text_type_main-default pl-2";
+  const inactiveLinkStyle = "text text_type_main-default pl-2 text_color_inactive";
+  const user = useSelector(getUser);
+
   return (
     <header className={AppHeaderStyle.header}>
       <nav className={`${AppHeaderStyle.nav} pt-4 pb-4`}>
@@ -13,31 +17,43 @@ function AppHeader() {
           <li>
             <ul className={AppHeaderStyle.navsection}>
               <li className="pt-4 pb-4 pr-5 pl-5">
-                <a href="#" className={AppHeaderStyle.listitem}>
-                  <BurgerIcon type="primary" />
-                  <p className="text text_type_main-default pl-2">
-                    Конструктор
-                  </p>
-                </a>
+                <NavLink to="/" className={AppHeaderStyle.listitem}>
+                  {({ isActive }) => (
+                    <>
+                      <BurgerIcon type={isActive ? "primary" : "secondary"} />
+                      <p className={isActive ? activeLinkStyle : inactiveLinkStyle}>
+                        Конструктор
+                      </p>
+                    </>
+                  )}
+                </NavLink>
               </li>
               <li className="pt-4 pb-4 pr-5 pl-5">
-                <a href="#" className={AppHeaderStyle.listitem}>
-                  <ListIcon type="secondary" />
-                  <p className="text text_type_main-default text_color_inactive pl-2">
-                    Лента заказов
-                  </p>
-                </a>
+                <NavLink to="/feed" className={AppHeaderStyle.listitem}>
+                  {({ isActive }) => (
+                    <>
+                      <ListIcon type={isActive ? "primary" : "secondary"} />
+                      <p className={isActive ? activeLinkStyle : inactiveLinkStyle}>
+                        Лента заказов
+                      </p>
+                    </>
+                  )}
+                </NavLink>
               </li>
             </ul>
           </li>
-          <li className={AppHeaderStyle.logo}><a href="#"><Logo /></a></li>
+          <li className={AppHeaderStyle.logo}><Link to="/"><Logo /></Link></li>
           <li className="pt-4 pb-4 pr-5 pl-5">
-            <a href="#" className={AppHeaderStyle.listitem}>
-              <ProfileIcon type="secondary" />
-              <p className="text text_type_main-default text_color_inactive pl-2">
-                Личный кабинет
-              </p>
-            </a>
+            <NavLink to="/profile" className={AppHeaderStyle.listitem}>
+              {({ isActive }) => (
+                <>
+                  <ProfileIcon type={isActive ? "primary" : "secondary"} />
+                  <p className={isActive ? activeLinkStyle : inactiveLinkStyle}>
+                    {user ? user.name : "Личный кабинет"}
+                  </p>
+                </>
+              )}
+            </NavLink>
           </li>
         </ul>
       </nav>

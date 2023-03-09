@@ -7,20 +7,24 @@ import FoodElement from "../FoodElement/FoodElement";
 import MoneyIcon from '../../images/iconMoney.svg';
 import Modal from "../Modal/Modal";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { setNewConstructorArray, addIngredient, getConstructor } from "../../services/slices/constructorSlice";
+import { setNewConstructorArray, addIngredient, getConstructor, clearConstructor } from "../../services/slices/constructorSlice";
 import { getOrderNumber } from "../../services/slices/orderSlice";
 import { useDrop } from "react-dnd/dist/hooks";
 import { BUN } from "../../utils/data";
+import { getUser } from "../../services/slices/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const initialSum = { sum: 0 };
 
 function BurgerConstructor() {
   const { v4: uuidv4 } = require('uuid');
   const constructor = useSelector(getConstructor);
+  const user = useSelector(getUser);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isOrderDetailsPopupOpen, setIsOrderDetailsPopupOpen] = useState(false);
 
-  const filling = useMemo(() => constructor.filter(ingredient => ingredient.type !== BUN), [constructor])
+  const filling = useMemo(() => constructor.filter(ingredient => ingredient.type !== BUN), [constructor]);
   const bun = useMemo(() => constructor.find(ingredient => ingredient.type === BUN), [constructor]);
 
   const totalSum = () => {
@@ -39,8 +43,16 @@ function BurgerConstructor() {
   }
 
   function openOrderDetailsPopup() {
+    if (!user) {
+      navigate('/login')
+      return
+    }
     const ingredientsIds = constructor.map(item => item._id)
-    dispatch(getOrderNumber(ingredientsIds));
+    dispatch(getOrderNumber(ingredientsIds)).then(({ payload }) => {
+      if (payload.success) {
+        dispatch(clearConstructor())
+      }
+    });
     setIsOrderDetailsPopupOpen(true);
   }
 
@@ -50,7 +62,7 @@ function BurgerConstructor() {
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "object",
-    drop: (item) => dispatch(addIngredient(item)),
+    drop: (item) => dispatch(addIngredient({ ...item, uuidvID: uuidv4() })),
     collect: (monitor) => ({
       isOver: !!monitor.isOver()
     })
@@ -68,7 +80,10 @@ function BurgerConstructor() {
     <>
       <section className={`${BurgerConstructorStyle.section} pt-25`} ref={drop}>
         {burgerSum.sum === 0 ?
-          <p style={{ boxShadow: isOver && "0px 0px 16px rgba(51, 51, 255, 0.25), 0px 0px 8px rgba(51, 51, 255, 0.25), 0px 4px 32px rgba(51, 51, 255, 0.5)" }} className={`${BurgerConstructorStyle.paragraph} text text_type_main-medium ${!isOver && 'text_color_inactive'}`}>Здесь будет бургер</p>
+          <p style={{ boxShadow: isOver && "0px 0px 16px rgba(51, 51, 255, 0.25), 0px 0px 8px rgba(51, 51, 255, 0.25), 0px 4px 32px rgba(51, 51, 255, 0.5)" }}
+            className={`${BurgerConstructorStyle.paragraph} text text_type_main-medium ${!isOver && 'text_color_inactive'}`}>
+            Здесь будет бургер
+          </p>
           :
           <div className={BurgerConstructorStyle.listsection}>
             {bun && <FoodElement
@@ -83,7 +98,7 @@ function BurgerConstructor() {
                 <FoodElement
                   id={element._id}
                   index={index}
-                  key={uuidv4()}
+                  key={element.uuidvID}
                   type={element.type}
                   name={element.name}
                   isLocked={false}

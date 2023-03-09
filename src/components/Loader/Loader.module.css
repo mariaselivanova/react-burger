@@ -12,6 +12,13 @@
   align-self: center;
 }
 
+.wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  min-height: 50vh;
+}
+
 @keyframes mulShdSpin {
 
   0%,

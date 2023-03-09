@@ -15,12 +15,18 @@
 .pricevalue {
   margin-top: 0;
   margin-bottom: 0;
+  color: #F2F2F3;
 }
 
 .name {
   text-align: center;
+  color: #F2F2F3;
 }
 
 .counter {
   position: absolute;
+}
+
+.link {
+  text-decoration: none;
 }

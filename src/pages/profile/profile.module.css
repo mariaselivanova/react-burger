@@ -1,0 +1,49 @@
+.wrap {
+  margin: 0 auto;
+  display: grid;
+  justify-content: center;
+  grid-template-columns: 320px 480px 320px;
+  grid-column-gap: 60px;
+  margin-top: 120px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-bottom: 100px;
+  margin-top: 20px;
+}
+
+.navlink {
+  text-decoration: none;
+}
+
+.activenavlink {
+  composes: navlink;
+  color: #F2F2F3;
+  cursor: auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.button {
+  background-color: transparent;
+  border: none;
+  text-align: start;
+  cursor: pointer;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.errortext {
+  text-align: center;
+}

@@ -2,7 +2,9 @@ import LoaderStyle from './Loader.module.css';
 
 function Loader() {
   return (
-    <span className={LoaderStyle.loader}></span>
+    <div className={LoaderStyle.wrap}>
+      <span className={LoaderStyle.loader}></span>
+    </div>
   )
 }
 
